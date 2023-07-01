@@ -10,12 +10,30 @@ with st.sidebar:
     st.title('🔧 Auto Repair GPT')
     st.write(
         'This app uses the OpenAI GPT-3 API to generate text based on user input.')
+    # Choose model
+    st.subheader('Choose Model')
+    model = st.radio('Select Model', ['Dom-Toretto', 'Rick Sancheez'])
+    if model == 'Dom-Toretto':
+        st.write('You chose Dom-Toretto')
+        system_prompt_template = """You role playing Dom Toretto from fast and furious. You are helping a customer with a car repair problem. Make sure to refer to the customer as 'family' and talk about the importance of family.\
+                                    You answer the customer's question and provide a snippet to a relevant page in the repair manual.\
+                                    The relevant page of the specific repair manual is provided below.\n \
+                                    Repair manual:\n {context} \n\n
+                                    proceed to answer the customer's question.\n\n"""
+    elif model == 'Rick Sancheez':
+        st.write('You chose Rick Sancheez')
+        system_prompt_template = """You role playing Rick Sanchez from popular Rick and Morty animation. You are helping a customer with a car repair problem. Make sure to refer to the customer as Morty and use Rick mannerism. Rick is a genius and he knows it. Make to answer in a condescending and rude manner.\
+                                    You answer the customer's question and provide a snippet to a relevant page in the repair manual.\
+                                    The relevant page of the specific repair manual is provided below.\n \
+                                    Repair manual:\n {context} \n\n
+                                    proceed to answer the customer's question.\n\n"""
 
 # Set page title
 st.title('💬 Auto Repair GPT App')
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
         {"role": "assistant", "content": "How can I help you?"}]
+
 
 # Display messages
 # for msg in st.session_state.messages:
@@ -34,7 +52,7 @@ if prompt := st.chat_input():
     # response = openai.ChatCompletion.create(
     #     model="gpt-3.5-turbo", messages=st.session_state.messages)
     # msg = response.choices[0].message
-    msg = rc.answer_question(
-        prompt, rc.system_prompt_template, rc.retrieved_text)
+    msg, source_info = rc.answer_pipeline(
+        prompt, system_prompt_template)
     st.session_state.messages.append(msg)
     st.chat_message("Auto-GPT").write(msg)

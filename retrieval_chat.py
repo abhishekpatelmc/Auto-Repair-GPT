@@ -73,11 +73,11 @@ print(source_info)
 
 
 # %%
-system_prompt_template = """You are a expert mechanic. You are helping a customer with a car repair problem.\
-You answer the customer's question and provide a snippet to a relevant page in the repair manual.\
-The relevant page of the specific repair manual is provided below.\n \
-Repair manual:\n {context} \n\n
-proceed to answer the customer's question.\n\n"""
+# system_prompt_template = """You are a expert mechanic. You are helping a customer with a car repair problem.\
+# You answer the customer's question and provide a snippet to a relevant page in the repair manual.\
+# The relevant page of the specific repair manual is provided below.\n \
+# Repair manual:\n {context} \n\n
+# proceed to answer the customer's question.\n\n"""
 
 
 def answer_question(question, system_prompt_template, retrieved_text):
@@ -96,11 +96,14 @@ def answer_question(question, system_prompt_template, retrieved_text):
 
 
 # %%
-query = "How do I change my oil?"
-query_result = retrieve_from_query(query, top_k=2)
-retrieved_text = retrieve_relevant_text(query_result)
-answer = answer_question(query, system_prompt_template, retrieved_text)
-print(answer)
+def answer_pipeline(query, system_prompt_template):
+    # query = "How do I change my oil?"
+    query_result = retrieve_from_query(query, top_k=2)
+    retrieved_text = retrieve_relevant_text(query_result)
+    source_info = get_source_info(query_result)
+    answer = answer_question(query, system_prompt_template, retrieved_text)
+    # print(answer)
+    return answer, source_info
 
 
 # %%
