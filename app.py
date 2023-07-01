@@ -1,6 +1,7 @@
 import streamlit as st
 import retrieval_chat as rc
-# import openai
+# from streamlit_toggle import st_toggleswitch
+import openai
 
 # Set page config
 openApiKey = st.secrets["OPENAI_API_KEY"]
@@ -45,7 +46,7 @@ if prompt := st.chat_input():
         st.info("OpenAI API Not working...")
         st.stop()
 
-    # openai.api_key = openApiKey
+    openai.api_key = openApiKey
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
     rc.retrieve_from_query(prompt)
@@ -56,3 +57,26 @@ if prompt := st.chat_input():
         prompt, system_prompt_template)
     st.session_state.messages.append(msg)
     st.chat_message("Auto-GPT").write(msg)
+    if len(msg) > 500:
+        image_prompt = prompt
+    else:
+        image_prompt = msg
+    image_url = openai.Image.create(
+        prompt=image_prompt,
+        n=1,
+        size="1024x1024"
+    )
+    # if st.button("Image"):
+    # print(image_url)
+    # st.chat_message("Auto-GPT").write(image_url.data[0].url)
+    st.image(image_url.data[0].url)
+    # st.chat_message.image(image_url.data[0].url)
+
+    # source_it = st.radio('source Info', ['Not', 'Yes'])
+    # if source_it == 'Not':
+    #     st.chat_message("Auto-GPT").write(msg)
+    # elif source_it == 'Yes':
+    #     msg, source_info = rc.answer_pipeline(
+    #         prompt, system_prompt_template)
+    #     st.session_state.messages.append(msg)
+    #     st.chat_message("Auto-GPT").write(msg+"\n\n"+source_info)
