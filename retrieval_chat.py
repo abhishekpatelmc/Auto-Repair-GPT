@@ -46,13 +46,19 @@ def retrieve_relevant_text(query_result):
     return context
 
 
-def get_source_info(query_result):
+def get_source_info(query_result, threshold=0.75):
     info = ""
     for x in query_result['matches']:
         document = x['metadata']['document']
         page_num = x['metadata']['page_num']
-        info += "Document: " + document + ",  Page #: " + str(page_num) + "\n"
+        score = x['score']
+        if score > threshold:
+            info += "Document: " + document + \
+                ",  Page #: " + str(page_num) + "\n" + \
+                "Score: " + str(score) + "\n\n"
 
+    if info == "":
+        info = "No relevant information from sources."
     return info
 
 # print(get_source_info(query_result))

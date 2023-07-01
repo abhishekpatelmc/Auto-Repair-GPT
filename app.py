@@ -2,12 +2,19 @@ import streamlit as st
 import retrieval_chat as rc
 # from streamlit_toggle import st_toggleswitch
 import openai
+from PIL import Image
+
+
+# Set page config
+image = Image.open('logo_black.jpg')
+st.image(image, width=50)
 
 # Set page config
 openApiKey = st.secrets["OPENAI_API_KEY"]
 
 # Set Sidebar
 with st.sidebar:
+    st.image(image, width=100)
     st.title('🔧 Auto Repair GPT')
     st.write(
         'This app uses the OpenAI GPT-3 API to generate text based on user input.')
@@ -35,6 +42,8 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = [
         {"role": "assistant", "content": "How can I help you?"}]
 
+source_it = st.radio('source Info', ['No', 'Yes'])
+
 
 # Display messages
 # for msg in st.session_state.messages:
@@ -56,7 +65,12 @@ if prompt := st.chat_input():
     msg, source_info = rc.answer_pipeline(
         prompt, system_prompt_template)
     st.session_state.messages.append(msg)
-    st.chat_message("Auto-GPT").write(msg)
+    # st.chat_message("Auto-GPT").write(msg)
+    if source_it == 'No':
+        st.chat_message("Auto-GPT").write(msg)
+    elif source_it == 'Yes':
+        st.chat_message("Auto-GPT").write(msg+"\n\nSOURCES:\n\n"+source_info)
+
     if len(msg) > 500:
         image_prompt = prompt
     else:
