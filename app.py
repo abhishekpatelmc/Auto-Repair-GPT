@@ -15,7 +15,7 @@ with st.sidebar:
 st.title('💬 Auto Repair GPT App')
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "Auto-GPT", "content": "How can I help you?"}]
+        {"role": "assistant", "content": "How can I help you?"}]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
