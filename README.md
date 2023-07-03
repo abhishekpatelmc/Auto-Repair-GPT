@@ -1,5 +1,7 @@
 # Auto-Repair-GPT
 
+A gpt like app which can help you anything related car repair 
+
 ## Resources
 
 ```bash
