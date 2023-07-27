@@ -10,9 +10,6 @@ pip freeze > requirements.txt
 
 ## Installation 
 
-```bash
-. venv/Scripts/activate
-```
 - Clone the repository: git clone
 ```bash 
     https://github.com/abhishekpatelmc/Auto-Repair-GPT
